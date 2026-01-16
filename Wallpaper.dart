@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Year Progress Wallpaper</title>
+
+<style>
+    body {
+        margin: 0;
+        background: black;
+        overflow: hidden;
+    }
+    canvas {
+        display: block;
+        margin: auto;
+        background: black;
+    }
+</style>
+</head>
+
+<body>
+
+<canvas id="yearCanvas" width="1080" height="2408"></canvas>
+
+<script>
+window.onload = function () {
+
+    const canvas = document.getElementById("yearCanvas");
+    const ctx = canvas.getContext("2d");
+
+    /* ========= SETTINGS ========= */
+    const YEAR = 2026;
+    const TOTAL_DAYS = 365;
+
+    const DOT_RADIUS = 14;   // Bigger dots
+    const DOT_GAP = 16;
+
+    /* ========= GRID SETTINGS ========= */
+    const COLUMNS = 14;
+    const DOT_SIZE = DOT_RADIUS * 2;
+    const ROWS = Math.ceil(TOTAL_DAYS / COLUMNS);
+
+    /* ========= COLORS ========= */
+    const COLOR_FUTURE = "#333";
+    const COLOR_PAST = "#ffffff";
+    const COLOR_TODAY = "#00ffcc";
+    const COLOR_JAN12 = "#8a2be2"; // Violet
+    const COLOR_FEB12 = "#007bff"; // Blue
+
+    /* ========= MOTIVATION QUOTES ========= */
+    const quotes = [
+        "Every day counts. Don’t waste today.",
+        "Small steps every day.",
+        "Discipline beats motivation.",
+        "No zero days.",
+        "Your future depends on today.",
+        "Stay consistent.",
+        "One day or day one.",
+        "Progress over perfection.",
+        "Do it even when you don’t feel like it.",
+        "Be better than yesterday."
+    ];
+
+    /* ========= DATE LOGIC ========= */
+    const today = new Date();
+    const yearStart = new Date(YEAR, 0, 1);
+    const todayIndex = Math.floor((today - yearStart) / 86400000);
+
+    const daysCompleted = Math.max(todayIndex, 0);
+    const daysLeft = TOTAL_DAYS - todayIndex - 1;
+
+    const progressPercent = ((daysCompleted / TOTAL_DAYS) * 100).toFixed(1);
+    const todayQuote = quotes[todayIndex % quotes.length];
+
+    /* ========= BACKGROUND ========= */
+    ctx.fillStyle = "#000";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    /* ========= GRID SIZE ========= */
+    const gridWidth =
+        (COLUMNS * DOT_SIZE) + ((COLUMNS - 1) * DOT_GAP);
+
+    const gridHeight =
+        (ROWS * DOT_SIZE) + ((ROWS - 1) * DOT_GAP);
+
+    /* ========= GRID POSITION (CENTERED + SLIGHTLY DOWN) ========= */
+    const startX = (canvas.width - gridWidth) / 2;
+    const startY = (canvas.height - gridHeight) / 2 + 120;
+
+    /* ========= DRAW DOT GRID ========= */
+    let x = startX;
+    let y = startY;
+    let col = 0;
+
+    for (let i = 0; i < TOTAL_DAYS; i++) {
+
+        let color = COLOR_FUTURE;
+
+        if (i < todayIndex) color = COLOR_PAST;
+        if (i === todayIndex) color = COLOR_TODAY;
+        if (i === 11) color = COLOR_JAN12; // Jan 12
+        if (i === 42) color = COLOR_FEB12; // Feb 12
+
+        ctx.beginPath();
+        ctx.arc(
+            x + DOT_RADIUS,
+            y + DOT_RADIUS,
+            DOT_RADIUS,
+            0,
+            Math.PI * 2
+        );
+        ctx.fillStyle = color;
+        ctx.fill();
+
+        col++;
+        x += DOT_SIZE + DOT_GAP;
+
+        if (col === COLUMNS) {
+            col = 0;
+            x = startX;
+            y += DOT_SIZE + DOT_GAP;
+        }
+    }
+
+    /* ========= MOTIVATION QUOTE ========= */
+    ctx.fillStyle = "#ffffff";
+    ctx.font = "bold 42px Arial";
+    ctx.textAlign = "center";
+    ctx.fillText(
+        todayQuote,
+        canvas.width / 2,
+        startY + gridHeight + 60
+    );
+
+    /* ========= PROGRESS PERCENT ========= */
+    ctx.fillStyle = "#00ffcc";
+    ctx.font = "bold 38px Arial";
+    ctx.fillText(
+        `${progressPercent}% of the year completed`,
+        canvas.width / 2,
+        startY + gridHeight + 110
+    );
+
+    /* ========= DAY COUNTS ========= */
+    ctx.fillStyle = "#aaaaaa";
+    ctx.font = "bold 40px Arial";
+    ctx.fillText(
+        `Days completed: ${daysCompleted}   |   Days left: ${daysLeft}`,
+        canvas.width / 2,
+        startY + gridHeight + 160
+    );
+};
+</script>
+
+</body>
+</html>
