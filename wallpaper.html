@@ -105,6 +105,9 @@ window.onload = function () {
     /* ========= GRID POSITION (CENTERED + SLIGHTLY DOWN) ========= */
     const startX = (canvas.width - gridWidth) / 2;
     const startY = (canvas.height - gridHeight) / 2 + 0;
+    const SAFE_TOP = canvas.height * 0.04; // 4% top margin
+    const startY = (canvas.height - gridHeight) / 2 + SAFE_TOP;
+
 
     /* ========= DRAW DOT GRID ========= */
     let x = startX;
@@ -173,6 +176,7 @@ window.onload = function () {
 
 </body>
 </html>
+
 
 
 
