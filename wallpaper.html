@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Year Progress Wallpaper</title>
 
 <style>
@@ -15,17 +15,26 @@ html, body {
   overflow: hidden;
 }
 
+/* Center canvas on laptops */
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 canvas {
   background: black;
-  width: 100vw;
+  width: auto;
   height: 100vh;
+  max-width: 100vw;
+  aspect-ratio: 1080 / 2340;
 }
 </style>
 </head>
 
 <body>
 
-<canvas id="yearCanvas" width="1080" height="2408"></canvas>
+<canvas id="yearCanvas" width="1080" height="2340"></canvas>
 
 <script>
 window.onload = function () {
@@ -37,11 +46,10 @@ window.onload = function () {
   const YEAR = 2026;
   const TOTAL_DAYS = 365;
 
-  const DOT_RADIUS = 14;
-  const DOT_GAP = 16;
-
-  /* ========= GRID SETTINGS ========= */
+  const DOT_RADIUS = 13;
+  const DOT_GAP = 14;
   const COLUMNS = 14;
+
   const DOT_SIZE = DOT_RADIUS * 2;
   const ROWS = Math.ceil(TOTAL_DAYS / COLUMNS);
 
@@ -69,9 +77,12 @@ window.onload = function () {
   /* ========= DATE LOGIC ========= */
   const today = new Date();
   const yearStart = new Date(YEAR, 0, 1);
-  const todayIndex = Math.floor((today - yearStart) / 86400000);
+  const todayIndex = Math.max(
+    0,
+    Math.floor((today - yearStart) / 86400000)
+  );
 
-  const daysCompleted = Math.max(todayIndex, 0);
+  const daysCompleted = todayIndex;
   const daysLeft = TOTAL_DAYS - todayIndex - 1;
   const progressPercent = ((daysCompleted / TOTAL_DAYS) * 100).toFixed(1);
   const todayQuote = quotes[todayIndex % quotes.length];
@@ -87,10 +98,14 @@ window.onload = function () {
   const gridHeight =
     (ROWS * DOT_SIZE) + ((ROWS - 1) * DOT_GAP);
 
+  /* ========= SAFE AREAS (Samsung + Desktop) ========= */
+  const SAFE_TOP = canvas.height * 0.06;
+  const SAFE_BOTTOM = canvas.height * 0.10;
+  const usableHeight = canvas.height - SAFE_TOP - SAFE_BOTTOM;
+
   /* ========= GRID POSITION ========= */
   const startX = (canvas.width - gridWidth) / 2;
-  const SAFE_TOP = canvas.height * 0.04; // ✅ adaptive top margin
-  const startY = (canvas.height - gridHeight) / 2 + SAFE_TOP;
+  const startY = SAFE_TOP + (usableHeight - gridHeight) / 2;
 
   /* ========= DRAW DOT GRID ========= */
   let x = startX;
@@ -98,15 +113,21 @@ window.onload = function () {
   let col = 0;
 
   for (let i = 0; i < TOTAL_DAYS; i++) {
-
     let color = COLOR_FUTURE;
+
     if (i < todayIndex) color = COLOR_PAST;
     if (i === todayIndex) color = COLOR_TODAY;
     if (i === 11) color = COLOR_JAN12;
     if (i === 42) color = COLOR_FEB12;
 
     ctx.beginPath();
-    ctx.arc(x + DOT_RADIUS, y + DOT_RADIUS, DOT_RADIUS, 0, Math.PI * 2);
+    ctx.arc(
+      x + DOT_RADIUS,
+      y + DOT_RADIUS,
+      DOT_RADIUS,
+      0,
+      Math.PI * 2
+    );
     ctx.fillStyle = color;
     ctx.fill();
 
@@ -121,30 +142,42 @@ window.onload = function () {
   }
 
   /* ========= TEXT ========= */
+  const TEXT_START = startY + gridHeight + 70;
+
   ctx.textAlign = "center";
 
   ctx.fillStyle = "#ffffff";
   ctx.font = "bold 42px Arial";
-  ctx.fillText(todayQuote, canvas.width / 2, startY + gridHeight + 60);
+  ctx.fillText(todayQuote, canvas.width / 2, TEXT_START);
 
   ctx.fillStyle = "#00ffcc";
   ctx.font = "bold 38px Arial";
   ctx.fillText(
     `${progressPercent}% of the year completed`,
     canvas.width / 2,
-    startY + gridHeight + 110
+    TEXT_START + 50
   );
 
   ctx.fillStyle = "#aaaaaa";
-  ctx.font = "bold 40px Arial";
+  ctx.font = "bold 36px Arial";
   ctx.fillText(
     `Days completed: ${daysCompleted}   |   Days left: ${daysLeft}`,
     canvas.width / 2,
-    startY + gridHeight + 160
+    TEXT_START + 100
   );
+
+  /* ========= AUTO-EXPORT PNG MODE ========= */
+  const params = new URLSearchParams(window.location.search);
+  if (params.get("export") === "png") {
+    const link = document.createElement("a");
+    link.download = `year-progress-${YEAR}-day-${daysCompleted}.png`;
+    link.href = canvas.toDataURL("image/png");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
 };
 </script>
 
 </body>
 </html>
-
