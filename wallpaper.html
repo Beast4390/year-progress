@@ -1,183 +1,337 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Year Progress Wallpaper</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2026 Year Progress Wallpaper - Galaxy M51</title>
 
 <style>
 html, body {
-  margin: 0;
-  padding: 0;
-  background: black;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    overflow: hidden;
 }
 
-/* Center canvas on laptops */
 body {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 canvas {
-  background: black;
-  width: auto;
-  height: 100vh;
-  max-width: 100vw;
-  aspect-ratio: 1080 / 2340;
+    background: #000;
+    width: auto;
+    height: 100vh;
+    max-width: 100vw;
+    aspect-ratio: 1080 / 2400;
 }
 </style>
 </head>
 
 <body>
 
-<canvas id="yearCanvas" width="1080" height="2340"></canvas>
+<canvas id="yearCanvas" width="1080" height="2400"></canvas>
 
 <script>
-window.onload = function () {
+window.onload = function() {
 
-  const canvas = document.getElementById("yearCanvas");
-  const ctx = canvas.getContext("2d");
+    const canvas = document.getElementById("yearCanvas");
+    const ctx = canvas.getContext("2d");
 
-  /* ========= SETTINGS ========= */
-  const YEAR = 2026;
-  const TOTAL_DAYS = 365;
+    const YEAR = 2026;
+    const TOTAL_DAYS = 365;
 
-  const DOT_RADIUS = 13;
-  const DOT_GAP = 14;
-  const COLUMNS = 14;
+    const DOT_RADIUS = 13;
+    const DOT_GAP = 14;
+    const COLUMNS = 14;
 
-  const DOT_SIZE = DOT_RADIUS * 2;
-  const ROWS = Math.ceil(TOTAL_DAYS / COLUMNS);
+    const DOT_SIZE = DOT_RADIUS * 2;
+    const ROWS = Math.ceil(TOTAL_DAYS / COLUMNS);
 
-  /* ========= COLORS ========= */
-  const COLOR_FUTURE = "#333";
-  const COLOR_PAST = "#ffffff";
-  const COLOR_TODAY = "#00ffcc";
-  const COLOR_JAN12 = "#8a2be2";
-  const COLOR_FEB12 = "#007bff";
+    const COLOR_FUTURE = "#2b2b2b";
+    const COLOR_PAST = "#ffffff";
+    const COLOR_TODAY = "#00ffcc";
 
-  /* ========= QUOTES ========= */
-  const quotes = [
-    "Every day counts. Don’t waste today.",
-    "Small steps every day.",
-    "Discipline beats motivation.",
-    "No zero days.",
-    "Your future depends on today.",
-    "Stay consistent.",
-    "One day or day one.",
-    "Progress over perfection.",
-    "Do it even when you don’t feel like it.",
-    "Be better than yesterday."
-  ];
+const quotes = [
+"Every day counts.",
+"Small steps every day.",
+"Discipline beats motivation.",
+"No zero days.",
+"Your future depends on today.",
+"Stay consistent.",
+"One day or day one.",
+"Progress over perfection.",
+"Do it anyway.",
+"Be better than yesterday.",
+"Dream big. Start small.",
+"Success is built daily.",
+"Consistency compounds.",
+"Keep showing up.",
+"The best time is now.",
+"Focus on progress.",
+"Your habits shape your future.",
+"Stay hungry. Stay foolish.",
+"Action cures fear.",
+"Results come from repetition.",
+"Every day matters.",
+"Make today legendary.",
+"Win the day.",
+"Keep moving forward.",
+"Discipline creates freedom.",
+"Your future self is watching.",
+"Never waste a good day.",
+"Done is better than perfect.",
+"Great things take time.",
+"Trust the process.",
+"Keep grinding.",
+"Stay focused.",
+"Work in silence.",
+"Believe in yourself.",
+"Be unstoppable.",
+"Push your limits.",
+"Start before you're ready.",
+"Make it happen.",
+"Stay patient.",
+"Earn your success.",
+"Keep learning.",
+"Keep building.",
+"Stay humble.",
+"Stay strong.",
+"Stay determined.",
+"Success leaves clues.",
+"Effort creates opportunities.",
+"Your dreams need action.",
+"Keep your promises.",
+"Master the basics.",
+"Growth is daily.",
+"Momentum starts today.",
+"Never quit early.",
+"Outwork yesterday.",
+"Stay committed.",
+"Create your future.",
+"Hard work wins.",
+"Consistency wins championships.",
+"Be proud of your progress.",
+"Turn dreams into plans.",
+"Your only competition is yesterday.",
+"Stay disciplined.",
+"Be relentless.",
+"Keep climbing.",
+"Keep improving.",
+"Stay curious.",
+"Focus on what matters.",
+"Show up every day.",
+"Take the next step.",
+"Progress is progress.",
+"Keep your standards high.",
+"Be obsessed with improvement.",
+"Make yourself proud.",
+"Don't stop now.",
+"Stay on the path.",
+"Trust your effort.",
+"Choose growth daily.",
+"Build better habits.",
+"Keep your vision clear.",
+"Success is a daily choice.",
+"Don't break the chain.",
+"Work hard. Stay kind.",
+"Focus. Execute. Repeat.",
+"Stay in the game.",
+"Every rep counts.",
+"Every hour matters.",
+"Every choice matters.",
+"Stay locked in.",
+"Small wins become big wins.",
+"Keep the promise to yourself.",
+"Today's effort is tomorrow's reward.",
+"Make progress, not excuses.",
+"Become who you admire.",
+"Do the hard things first.",
+"Success starts with discipline.",
+"Keep going. You're closer.",
+"Your best days are ahead.",
+"Never settle for average.",
+"Keep chasing excellence.",
+"Make 2026 unforgettable."
+];
+```
 
-  /* ========= DATE LOGIC ========= */
-  const today = new Date();
-  const yearStart = new Date(YEAR, 0, 1);
-  const todayIndex = Math.max(
-    0,
-    Math.floor((today - yearStart) / 86400000)
-  );
 
-  const daysCompleted = todayIndex;
-  const daysLeft = TOTAL_DAYS - todayIndex - 1;
-  const progressPercent = ((daysCompleted / TOTAL_DAYS) * 100).toFixed(1);
-  const todayQuote = quotes[todayIndex % quotes.length];
+    const today = new Date();
+    const yearStart = new Date(YEAR, 0, 1);
 
-  /* ========= BACKGROUND ========= */
-  ctx.fillStyle = "#000";
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
+    let todayIndex = Math.floor((today - yearStart) / 86400000);
 
-  /* ========= GRID SIZE ========= */
-  const gridWidth =
-    (COLUMNS * DOT_SIZE) + ((COLUMNS - 1) * DOT_GAP);
+    if (todayIndex < 0) todayIndex = 0;
+    if (todayIndex > 364) todayIndex = 364;
 
-  const gridHeight =
-    (ROWS * DOT_SIZE) + ((ROWS - 1) * DOT_GAP);
+    const daysCompleted = todayIndex;
+    const daysLeft = TOTAL_DAYS - todayIndex - 1;
+    const progressPercent = ((daysCompleted / TOTAL_DAYS) * 100).toFixed(1);
 
-  /* ========= SAFE AREAS (Samsung + Desktop) ========= */
-  const SAFE_TOP = canvas.height * 0.06;
-  const SAFE_BOTTOM = canvas.height * 0.10;
-  const usableHeight = canvas.height - SAFE_TOP - SAFE_BOTTOM;
+    const todayQuote = quotes[todayIndex % quotes.length];
 
-  /* ========= GRID POSITION ========= */
-  const startX = (canvas.width - gridWidth) / 2;
-  const startY = SAFE_TOP + (usableHeight - gridHeight) / 2;
+    const todayDate = today.toLocaleDateString("en-US", {
+        day: "numeric",
+        month: "long",
+        year: "numeric"
+    });
 
-  /* ========= DRAW DOT GRID ========= */
-  let x = startX;
-  let y = startY;
-  let col = 0;
+    /* Background */
+    ctx.fillStyle = "#000";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  for (let i = 0; i < TOTAL_DAYS; i++) {
-    let color = COLOR_FUTURE;
+    /* Title */
+    ctx.textAlign = "center";
 
-    if (i < todayIndex) color = COLOR_PAST;
-    if (i === todayIndex) color = COLOR_TODAY;
-    if (i === 11) color = COLOR_JAN12;
-    if (i === 42) color = COLOR_FEB12;
+    ctx.fillStyle = "#00ffcc";
+    ctx.font = "bold 72px Arial";
+    ctx.fillText(YEAR, canvas.width / 2, 120);
 
-    ctx.beginPath();
-    ctx.arc(
-      x + DOT_RADIUS,
-      y + DOT_RADIUS,
-      DOT_RADIUS,
-      0,
-      Math.PI * 2
-    );
-    ctx.fillStyle = color;
-    ctx.fill();
+    /* Grid Size */
+    const gridWidth =
+        (COLUMNS * DOT_SIZE) + ((COLUMNS - 1) * DOT_GAP);
 
-    col++;
-    x += DOT_SIZE + DOT_GAP;
+    const gridHeight =
+        (ROWS * DOT_SIZE) + ((ROWS - 1) * DOT_GAP);
 
-    if (col === COLUMNS) {
-      col = 0;
-      x = startX;
-      y += DOT_SIZE + DOT_GAP;
+    const startX = (canvas.width - gridWidth) / 2;
+    const startY = 220;
+
+    /* Draw Dots */
+    let x = startX;
+    let y = startY;
+    let col = 0;
+
+    for (let i = 0; i < TOTAL_DAYS; i++) {
+
+        let color = COLOR_FUTURE;
+
+        if (i < todayIndex)
+            color = COLOR_PAST;
+
+        if (i === todayIndex)
+            color = COLOR_TODAY;
+
+        ctx.beginPath();
+        ctx.arc(
+            x + DOT_RADIUS,
+            y + DOT_RADIUS,
+            DOT_RADIUS,
+            0,
+            Math.PI * 2
+        );
+        ctx.fillStyle = color;
+        ctx.fill();
+
+        col++;
+        x += DOT_SIZE + DOT_GAP;
+
+        if (col === COLUMNS) {
+            col = 0;
+            x = startX;
+            y += DOT_SIZE + DOT_GAP;
+        }
     }
-  }
 
-  /* ========= TEXT ========= */
-  const TEXT_START = startY + gridHeight + 70;
+    /* Text Section */
+    const TEXT_START = startY + gridHeight + 80;
 
-  ctx.textAlign = "center";
+    ctx.fillStyle = "#888";
+    ctx.font = "34px Arial";
+    ctx.fillText(
+        todayDate,
+        canvas.width / 2,
+        TEXT_START
+    );
 
-  ctx.fillStyle = "#ffffff";
-  ctx.font = "bold 42px Arial";
-  ctx.fillText(todayQuote, canvas.width / 2, TEXT_START);
+    ctx.fillStyle = "#ffffff";
+    ctx.font = "bold 48px Arial";
+    ctx.fillText(
+        todayQuote,
+        canvas.width / 2,
+        TEXT_START + 70
+    );
 
-  ctx.fillStyle = "#00ffcc";
-  ctx.font = "bold 38px Arial";
-  ctx.fillText(
-    `${progressPercent}% of the year completed`,
-    canvas.width / 2,
-    TEXT_START + 50
-  );
+    ctx.fillStyle = "#00ffcc";
+    ctx.font = "bold 100px Arial";
+    ctx.fillText(
+        progressPercent + "%",
+        canvas.width / 2,
+        TEXT_START + 210
+    );
 
-  ctx.fillStyle = "#aaaaaa";
-  ctx.font = "bold 36px Arial";
-  ctx.fillText(
-    `Days completed: ${daysCompleted}   |   Days left: ${daysLeft}`,
-    canvas.width / 2,
-    TEXT_START + 100
-  );
+    ctx.fillStyle = "#ffffff";
+    ctx.font = "bold 40px Arial";
+    ctx.fillText(
+        "YEAR COMPLETED",
+        canvas.width / 2,
+        TEXT_START + 270
+    );
 
-  /* ========= AUTO-EXPORT PNG MODE ========= */
-  const params = new URLSearchParams(window.location.search);
-  if (params.get("export") === "png") {
-    const link = document.createElement("a");
-    link.download = `year-progress-${YEAR}-day-${daysCompleted}.png`;
-    link.href = canvas.toDataURL("image/png");
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  }
+    /* Progress Bar */
+    const barWidth = 700;
+    const barHeight = 24;
+    const barX = (canvas.width - barWidth) / 2;
+    const barY = TEXT_START + 320;
+
+    ctx.fillStyle = "#222";
+    ctx.fillRect(
+        barX,
+        barY,
+        barWidth,
+        barHeight
+    );
+
+    ctx.fillStyle = "#00ffcc";
+    ctx.fillRect(
+        barX,
+        barY,
+        (barWidth * daysCompleted) / TOTAL_DAYS,
+        barHeight
+    );
+
+    ctx.fillStyle = "#aaaaaa";
+    ctx.font = "36px Arial";
+    ctx.fillText(
+        daysCompleted +
+        " Days Done  •  " +
+        daysLeft +
+        " Days Left",
+        canvas.width / 2,
+        TEXT_START + 400
+    );
+
+    ctx.fillStyle = "#555";
+    ctx.font = "30px Arial";
+    ctx.fillText(
+        "Make " + YEAR + " Count",
+        canvas.width / 2,
+        canvas.height - 80
+    );
+
+    /* Auto Export PNG */
+    const params = new URLSearchParams(window.location.search);
+
+    if (params.get("export") === "png") {
+        const link = document.createElement("a");
+        link.download =
+            `year-progress-${YEAR}-day-${daysCompleted}.png`;
+
+        link.href =
+            canvas.toDataURL("image/png");
+
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
 };
 </script>
 
 </body>
 </html>
+```
