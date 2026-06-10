@@ -35,27 +35,23 @@ canvas {
 <body>
 
 <canvas id="yearCanvas" width="1080" height="2400"></canvas>
-
 <script>
 window.onload = function() {
-
     const canvas = document.getElementById("yearCanvas");
     const ctx = canvas.getContext("2d");
 
-    const YEAR = 2026;
-    const TOTAL_DAYS = 365;
+    ctx.fillStyle = "#000";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    const DOT_RADIUS = 13;
-    const DOT_GAP = 14;
-    const COLUMNS = 14;
+    ctx.fillStyle = "#00ffcc";
+    ctx.font = "bold 100px Arial";
+    ctx.fillText("HELLO", 300, 500);
 
-    const DOT_SIZE = DOT_RADIUS * 2;
-    const ROWS = Math.ceil(TOTAL_DAYS / COLUMNS);
-
-    const COLOR_FUTURE = "#2b2b2b";
-    const COLOR_PAST = "#ffffff";
-    const COLOR_TODAY = "#00ffcc";
-<script>
+    ctx.fillStyle = "#ffffff";
+    ctx.font = "50px Arial";
+    ctx.fillText("GitHub Pages Working", 180, 650);
+};
+</script>
 
 const quotes = [
 "Every day counts.",
