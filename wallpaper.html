@@ -6,17 +6,20 @@
 <title>Year Progress Wallpaper</title>
 
 <style>
-    body {
-        margin: 0;
-        background: black;
-        overflow: hidden;
-    }
-    canvas {
-        display: block;
-        width: 100vw;
-        height: auto;
-        background: black;
-    }
+    html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    background: black;
+    overflow: hidden;
+}
+
+canvas {
+    width: 100vw;
+    height: 100vh;
+    display: block;
+}
 </style>
 </head>
 
@@ -210,8 +213,8 @@ window.onload = function () {
         (ROWS * DOT_SIZE) + ((ROWS - 1) * DOT_GAP);
 
     /* ========= GRID POSITION (CENTERED + SLIGHTLY DOWN) ========= */
-    const startX = (canvas.width - gridWidth) / 2;
-    const startY = 180;
+    const startX = 120;
+    const startY = 250;
     
 
     /* ========= DRAW DOT GRID ========= */
