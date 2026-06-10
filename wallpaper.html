@@ -213,8 +213,8 @@ window.onload = function () {
         (ROWS * DOT_SIZE) + ((ROWS - 1) * DOT_GAP);
 
     /* ========= GRID POSITION (CENTERED + SLIGHTLY DOWN) ========= */
-    const startX = 120;
-    const startY = 250;
+    const startX = 90;
+    const startY = 320;
     
 
     /* ========= DRAW DOT GRID ========= */
@@ -259,7 +259,7 @@ window.onload = function () {
     ctx.fillText(
         todayQuote,
         canvas.width / 2,
-        startY + gridHeight + 90
+        startY + gridHeight + 120
     );
 
     /* ========= PROGRESS PERCENT ========= */
@@ -268,7 +268,7 @@ window.onload = function () {
     ctx.fillText(
         `${progressPercent}% of the year completed`,
         canvas.width / 2,
-        startY + gridHeight + 145
+        startY + gridHeight + 180
     );
 
     /* ========= DAY COUNTS ========= */
@@ -277,7 +277,7 @@ window.onload = function () {
     ctx.fillText(
         `Days completed: ${daysCompleted}   |   Days left: ${daysLeft}`,
         canvas.width / 2,
-        startY + gridHeight + 200
+        startY + gridHeight + 240
     );
 };
 </script>
