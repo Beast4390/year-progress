@@ -1,57 +1,46 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>2026 Year Progress Wallpaper - Galaxy M51</title>
+<title>2026 Year Progress Wallpaper</title>
 
 <style>
-html, body {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    height: 100%;
-    background: #000;
-    overflow: hidden;
+html,body{
+margin:0;
+padding:0;
+width:100%;
+height:100%;
+background:#000;
+overflow:hidden;
 }
 
-body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+body{
+display:flex;
+justify-content:center;
+align-items:center;
 }
 
-canvas {
-    background: #000;
-    width: auto;
-    height: 100vh;
-    max-width: 100vw;
-    aspect-ratio: 1080 / 2400;
+canvas{
+width:auto;
+height:100vh;
+max-width:100vw;
+background:#000;
 }
 </style>
 </head>
-
 <body>
 
-<canvas id="yearCanvas" width="1080" height="2400"></canvas>
+<canvas id="canvas" width="1080" height="2400"></canvas>
+
 <script>
-window.onload = function() {
-    const canvas = document.getElementById("yearCanvas");
-    const ctx = canvas.getContext("2d");
+window.onload = function(){
 
-    ctx.fillStyle = "#000";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
 
-    ctx.fillStyle = "#00ffcc";
-    ctx.font = "bold 100px Arial";
-    ctx.fillText("HELLO", 300, 500);
-
-    ctx.fillStyle = "#ffffff";
-    ctx.font = "50px Arial";
-    ctx.fillText("GitHub Pages Working", 180, 650);
-};
-</script>
+const YEAR = 2026;
+const TOTAL_DAYS = 365;
 
 const quotes = [
 "Every day counts.",
@@ -74,7 +63,7 @@ const quotes = [
 "Stay hungry. Stay foolish.",
 "Action cures fear.",
 "Results come from repetition.",
-"Every day matters.",
+"Every dot matters.",
 "Make today legendary.",
 "Win the day.",
 "Keep moving forward.",
@@ -155,180 +144,90 @@ const quotes = [
 "Keep chasing excellence.",
 "Make 2026 unforgettable."
 ];
-```
 
+const today = new Date();
+const yearStart = new Date(YEAR,0,1);
 
-    const today = new Date();
-    const yearStart = new Date(YEAR, 0, 1);
+let dayIndex = Math.floor((today - yearStart)/86400000);
 
-    let todayIndex = Math.floor((today - yearStart) / 86400000);
+if(dayIndex < 0) dayIndex = 0;
+if(dayIndex > 364) dayIndex = 364;
 
-    if (todayIndex < 0) todayIndex = 0;
-    if (todayIndex > 364) todayIndex = 364;
+const completed = dayIndex;
+const left = TOTAL_DAYS - completed - 1;
+const percent = ((completed/TOTAL_DAYS)*100).toFixed(1);
 
-    const daysCompleted = todayIndex;
-    const daysLeft = TOTAL_DAYS - todayIndex - 1;
-    const progressPercent = ((daysCompleted / TOTAL_DAYS) * 100).toFixed(1);
+const quote = quotes[dayIndex % quotes.length];
 
-    const todayQuote = quotes[todayIndex % quotes.length];
+ctx.fillStyle="#000";
+ctx.fillRect(0,0,1080,2400);
 
-    const todayDate = today.toLocaleDateString("en-US", {
-        day: "numeric",
-        month: "long",
-        year: "numeric"
-    });
+ctx.textAlign="center";
 
-    /* Background */
-    ctx.fillStyle = "#000";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+ctx.fillStyle="#00ffcc";
+ctx.font="bold 90px Arial";
+ctx.fillText("2026",540,180);
 
-    /* Title */
-    ctx.textAlign = "center";
+ctx.fillStyle="#ffffff";
+ctx.font="bold 55px Arial";
+wrapText(quote,540,420,850,70);
 
-    ctx.fillStyle = "#00ffcc";
-    ctx.font = "bold 72px Arial";
-    ctx.fillText(YEAR, canvas.width / 2, 120);
+ctx.fillStyle="#00ffcc";
+ctx.font="bold 170px Arial";
+ctx.fillText(percent+"%",540,900);
 
-    /* Grid Size */
-    const gridWidth =
-        (COLUMNS * DOT_SIZE) + ((COLUMNS - 1) * DOT_GAP);
+ctx.fillStyle="#ffffff";
+ctx.font="bold 55px Arial";
+ctx.fillText("YEAR COMPLETED",540,1020);
 
-    const gridHeight =
-        (ROWS * DOT_SIZE) + ((ROWS - 1) * DOT_GAP);
+const barWidth=700;
+const barHeight=30;
+const barX=(1080-barWidth)/2;
+const barY=1120;
 
-    const startX = (canvas.width - gridWidth) / 2;
-    const startY = 220;
+ctx.fillStyle="#222";
+ctx.fillRect(barX,barY,barWidth,barHeight);
 
-    /* Draw Dots */
-    let x = startX;
-    let y = startY;
-    let col = 0;
+ctx.fillStyle="#00ffcc";
+ctx.fillRect(
+barX,
+barY,
+(barWidth*completed)/TOTAL_DAYS,
+barHeight
+);
 
-    for (let i = 0; i < TOTAL_DAYS; i++) {
+ctx.fillStyle="#cccccc";
+ctx.font="50px Arial";
+ctx.fillText(completed+" Days Done",540,1350);
 
-        let color = COLOR_FUTURE;
+ctx.fillText(left+" Days Left",540,1450);
 
-        if (i < todayIndex)
-            color = COLOR_PAST;
+ctx.fillStyle="#666";
+ctx.font="40px Arial";
+ctx.fillText("Make Every Day Count",540,2250);
 
-        if (i === todayIndex)
-            color = COLOR_TODAY;
+function wrapText(text,x,y,maxWidth,lineHeight){
+let words=text.split(" ");
+let line="";
 
-        ctx.beginPath();
-        ctx.arc(
-            x + DOT_RADIUS,
-            y + DOT_RADIUS,
-            DOT_RADIUS,
-            0,
-            Math.PI * 2
-        );
-        ctx.fillStyle = color;
-        ctx.fill();
+for(let n=0;n<words.length;n++){
+let testLine=line+words[n]+" ";
+let metrics=ctx.measureText(testLine);
 
-        col++;
-        x += DOT_SIZE + DOT_GAP;
+if(metrics.width>maxWidth && n>0){
+ctx.fillText(line,x,y);
+line=words[n]+" ";
+y+=lineHeight;
+}else{
+line=testLine;
+}
+}
+ctx.fillText(line,x,y);
+}
 
-        if (col === COLUMNS) {
-            col = 0;
-            x = startX;
-            y += DOT_SIZE + DOT_GAP;
-        }
-    }
-
-    /* Text Section */
-    const TEXT_START = startY + gridHeight + 80;
-
-    ctx.fillStyle = "#888";
-    ctx.font = "34px Arial";
-    ctx.fillText(
-        todayDate,
-        canvas.width / 2,
-        TEXT_START
-    );
-
-    ctx.fillStyle = "#ffffff";
-    ctx.font = "bold 48px Arial";
-    ctx.fillText(
-        todayQuote,
-        canvas.width / 2,
-        TEXT_START + 70
-    );
-
-    ctx.fillStyle = "#00ffcc";
-    ctx.font = "bold 100px Arial";
-    ctx.fillText(
-        progressPercent + "%",
-        canvas.width / 2,
-        TEXT_START + 210
-    );
-
-    ctx.fillStyle = "#ffffff";
-    ctx.font = "bold 40px Arial";
-    ctx.fillText(
-        "YEAR COMPLETED",
-        canvas.width / 2,
-        TEXT_START + 270
-    );
-
-    /* Progress Bar */
-    const barWidth = 700;
-    const barHeight = 24;
-    const barX = (canvas.width - barWidth) / 2;
-    const barY = TEXT_START + 320;
-
-    ctx.fillStyle = "#222";
-    ctx.fillRect(
-        barX,
-        barY,
-        barWidth,
-        barHeight
-    );
-
-    ctx.fillStyle = "#00ffcc";
-    ctx.fillRect(
-        barX,
-        barY,
-        (barWidth * daysCompleted) / TOTAL_DAYS,
-        barHeight
-    );
-
-    ctx.fillStyle = "#aaaaaa";
-    ctx.font = "36px Arial";
-    ctx.fillText(
-        daysCompleted +
-        " Days Done  •  " +
-        daysLeft +
-        " Days Left",
-        canvas.width / 2,
-        TEXT_START + 400
-    );
-
-    ctx.fillStyle = "#555";
-    ctx.font = "30px Arial";
-    ctx.fillText(
-        "Make " + YEAR + " Count",
-        canvas.width / 2,
-        canvas.height - 80
-    );
-
-    /* Auto Export PNG */
-    const params = new URLSearchParams(window.location.search);
-
-    if (params.get("export") === "png") {
-        const link = document.createElement("a");
-        link.download =
-            `year-progress-${YEAR}-day-${daysCompleted}.png`;
-
-        link.href =
-            canvas.toDataURL("image/png");
-
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    }
 };
 </script>
 
 </body>
 </html>
-```
+
