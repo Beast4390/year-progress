@@ -47,7 +47,7 @@ Year-Progress-Wallpaper/
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/year-progress-wallpaper.git
+git clone https://github.com/Beast4390/year-progress-wallpaper.git
 ```
 
 ### 2. Open the Project
